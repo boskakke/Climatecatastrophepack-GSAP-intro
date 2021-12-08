@@ -1,56 +1,93 @@
 import gsap from 'gsap'
 
-const planetsTimeline = gsap.timeline({ repeat: 1 })
+const random = (min, max, round) => {
+	return gsap.utils.random(min, max, round)
+}
 
-planetsTimeline.addLabel('start')
+const hue = () => {
+	const color = random(1, 2, 1)
+	if (color === 1) {
+		return random(0, 45, 0.1)
+	} else {
+		return random(287, 360, 0.1)
+	}
+}
 
-const circles = document.querySelectorAll('.circle')
-const scaleUp = document.querySelectorAll('.scaleUp')
+const generateColor = () => {
+	const color =
+		'hsl(' +
+		hue() +
+		',' +
+		random(50, 100, 0.1) +
+		'%,' +
+		random(41, 80, 0.1) +
+		'%)'
+	return color
+}
 
-planetsTimeline
-	.fromTo(
-		'.line',
-		{ yPercent: 20, opacity: 0 },
-		{ duration: .75, yPercent: 0, opacity: 1, ease: 'back.out(2)', stagger: 0.2 },
-		'<'
-	)
-	.to('.tilt-left', { skewX: '15deg', duration: 0.2 }, '>+=.1')
-	.to('.tilt-right', { skewX: '-15deg', duration: 0.2 }, '<')
-	.fromTo(
-		scaleUp,
-		{ scale: 0.8, opacity: 0 },
-		{ scale: 1, opacity: 1, duration: 1, stagger: 0.1, ease: 'back.out(3)' },
-		'<.4'
-	)
+const removeHearts = () => {
+	const hearts = document.querySelectorAll('.heart-icon')
+	hearts.forEach((heart, i) => {
+		heart.remove()
+	})
+	heartsTimeline.eventCallback('onComplete', null)
+}
 
-circles.forEach((circle, i) => {
-	const planet = circle.querySelector('.planet')
-	const timeline = gsap.timeline({ repeat: -1 })
-	const calcDuration = gsap.utils.random(10, 20, 1)
-	const direction = i % 2 === 0 ? -360 : 360
-	timeline
-		.to(
-			circle,
+const heartsTimeline = gsap.timeline()
+
+heartsTimeline.addLabel('start')
+
+const generateHearts = (e, x, y) => {
+
+	const hearts = []
+	const amount = random(50, 100, 1)
+	for (let i = 0; i < amount; i++) {
+		const heart = document.createElement('div')
+		heart.innerHTML =
+			'<svg class="heart-svg" viewBox="0 0 30 30" ><use xlink:href="#heart"></use></svg>'
+		heart.classList.add('heart-icon')
+		heart.style.setProperty('--fill', generateColor())
+		heart.style.setProperty('--x', x)
+		heart.style.setProperty('--y', y)
+
+		e.currentTarget.parentNode.appendChild(heart)
+		hearts.push(heart)
+	}
+
+	hearts.forEach((heart, index) => {
+		const tl = gsap.timeline()
+		tl.fromTo(
+			heart,
+			{ y: 0, opacity: 1 },
 			{
-				rotate: direction,
-				duration: calcDuration,
-				ease: 'none',
+				y: random(-400, 400, 1),
+				x: random(-400, 400, 1),
+				scale: random(1, 12, 0.1),
+				opacity: 0,
+				duration: random(0.5, 2.5, 0.1),
+				// physics2D: {
+				// 	velocity: random(200, 400, 1),
+				// 	angle: random(180, 360, 1),
+				// 	gravity: random(200, 700, 1),
+				// 	acceleration: 50,
+				// },
 			},
 			'<'
 		)
-		.to(
-			planet,
-			{
-				rotate: direction * -1,
-				duration: calcDuration,
-				ease: 'none',
-			},
-			'<'
-		)
-	planetsTimeline.add(timeline, '<')
-})
+		heartsTimeline.add(tl, 'start')
+	})
 
+	heartsTimeline.play(0)
+	// .call(removeHearts)
 
-document.querySelector('.btn').addEventListener('click', () => {
-	planetsTimeline.play('start')
+}
+
+const logo = document.querySelector('[data-logo]')
+
+logo.addEventListener('click', function (e) {
+	const rect = e.target.getBoundingClientRect()
+	const x = e.clientX - rect.left + 'px' //x position within the element.
+	const y = e.clientY - rect.top + 'px' //y position within the element.
+	removeHearts()
+	generateHearts(e, x, y)
 })

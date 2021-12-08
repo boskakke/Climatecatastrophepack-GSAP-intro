@@ -1,117 +1,48 @@
-
-* {
-	box-sizing: border-box;
-}
+body,
 html {
 	height: 100%;
+	background: #111;
 }
-@import url("https://fonts.googleapis.com/css2?family=Bungee&display=swap");
-
-body {
+.container {
 	height: 100%;
-	background: #333;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+.logo-box {
+	width: 400px;
 	position: relative;
-	margin: 0;
+	cursor: pointer;
 }
 
-.btn {
-	font-size: 12px;
-	border: 0;
-	padding: 0.4rem 0.6rem;
-	line-height: 1;
+.hidden {
+	display: none;
+	visibility: hidden;
+}
+.costume-logo {
+	fill: #fff;
 }
 
-.container {
-	height: 100vh;
-	width: 100%;
-	overflow: hidden;
-	background-image: linear-gradient(to bottom, #111, #000);
-	background-size: 100%;
+.heart {
+	fill: pink;
 }
-.title {
+
+.heart-svg {
+	fill: var(--fill, orange);
+	width: 20px;
+}
+.heart-icon {
+	position: absolute;
+	left: var(--x, 50%);
+	top: var(--y, 50%);
+	pointer-events: none;
+	transform: scale(0.5);
+}
+.koordinater {
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 2;
-	line-height: 0.9;
-	&__container {
-		font-size: clamp(3rem, 8vw, 12rem);
-		color: #fff;
-		font-family: "Bungee", sans-serif;
-		text-transform: uppercase;
-		font-weight: 900;
-		text-align: center;
-	}
-}
-.line {
-	span {
-		display: inline-block;
-	}
-	&--credits {
-		font-size: 0.75rem;
-		margin-top: 1rem;
-	}
-	a {
-		color: red;
-	}
-}
-.circles {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 1px;
-	height: 1px;
-}
-
-.circle {
-	border-radius: 50%;
-	border: 3px solid red;
-	position: absolute;
-	transform: translate(-50%, -50%);
-	&-1 {
-		width: 20vw;
-		height: 20vw;
-	}
-	&-2 {
-		width: 40vw;
-		height: 40vw;
-	}
-	&-3 {
-		width: 60vw;
-		height: 60vw;
-	}
-	&-4 {
-		width: 80vw;
-		height: 80vw;
-	}
-	&-5 {
-		width: 100vw;
-		height: 100vw;
-	}
-}
-.scaleUp {
-	&:nth-child(odd) {
-		--border: dashed;
-	}
-}
-.planet {
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	background-color: yellow;
-	width: 30px;
-	height: 30px;
-	position: absolute;
-	left: 50%;
-	top: 0;
-	transform: translate(0, -50%);
-	border-radius: 50%;
+	color: #666;
+	font-size: 12px;
+	padding: 5px;
 }
